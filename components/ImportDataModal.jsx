@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { db } from '../models/db.js';
 import ErrorModal from './ErrorModal';
+import './Idealist.css'; // Import the CSS file
 
 function ImportDataModal({ show, handleClose, importedData, handleConfirmImportData }) {
   const [conflicts, setConflicts] = useState([]);
@@ -36,7 +37,7 @@ function ImportDataModal({ show, handleClose, importedData, handleConfirmImportD
 
   const handleResolveConflict = (idea, action) => {
     if (action === 'overwrite' || action === 'newId') {
-      const existingIds = conflicts.map(i => i.id);
+      const existingIds = conflicts.map((i) => i.id);
       let newId = 1;
       while (existingIds.includes(newId)) {
         newId++;
@@ -64,7 +65,7 @@ function ImportDataModal({ show, handleClose, importedData, handleConfirmImportD
           <h5>Ideas to be imported from binder:</h5>
           <ListGroup>
             {conflicts.map((idea) => (
-              <ListGroup.Item key={idea.id}>
+              <ListGroup.Item key={idea.id} className="custom-list-item">
                 <h6>{idea.title}</h6>
                 <p><strong>Content:</strong> {idea.content}</p>
                 <p><strong>Status:</strong> {idea.status}</p>

@@ -47,7 +47,7 @@ function IdeaEditor({ selectedIdeaId, onClose }) {
       await db.ideas.update(idea.id, { title: editTitle, status: editStatus, ideatype: editType, lastedited: new Date() });
       setIdea((prevIdea) => ({ ...prevIdea, title: editTitle, status: editStatus, ideatype: editType }));
       setShowEditModal(false);
-      setSuccessMessage('Idea Information updated successfully');
+      setSuccessMessage('Changes Successfully Saved.');
       setShowSuccessModal(true);
     }
   };
@@ -105,7 +105,7 @@ function IdeaEditor({ selectedIdeaId, onClose }) {
       </Row>
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Title, Status, and Type</Modal.Title>
+          <Modal.Title>Edit Info</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

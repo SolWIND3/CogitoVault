@@ -22,7 +22,7 @@ function NavbarComponent() {
   const [showImportConfirmationModal, setShowImportConfirmationModal] = useState(false);
   const [showExportConfirmationModal, setShowExportConfirmationModal] = useState(false); // State for export confirmation modal
   const [importedData, setImportedData] = useState(null);
-  const [binderName, setBinderName] = useState('Ideas.json');
+  const [binderName, setBinderName] = useState('Binder.json');
 
   const handleShowRenameBinderModal = () => setShowRenameBinderModal(true);
   const handleCloseRenameBinderModal = () => setShowRenameBinderModal(false);

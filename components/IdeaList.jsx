@@ -126,6 +126,7 @@ function IdeaList() {
                       <Card.Text><strong>Creation Date:</strong> {new Date(idea.creationdate).toLocaleString()}</Card.Text>
                       <Card.Text><strong>Last Edited:</strong> {new Date(idea.lastedited).toLocaleString()}</Card.Text>
                       <Card.Text><strong>Type:</strong> {idea.ideatype}</Card.Text>
+                      <Card.Text><strong>Status:</strong> {idea.status}</Card.Text> {/* Display the status */}
                       <Button variant="warning" onClick={() => handleEditIdea(idea.id)}>
                         Open
                       </Button>

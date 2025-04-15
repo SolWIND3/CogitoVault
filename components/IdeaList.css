@@ -48,3 +48,15 @@
   margin-top: 20px;
   text-align: center;
 }
+
+.custom-list-item {
+    background-color: #161616; /* Set the background color */
+    color: #fcdcb1; /* Set the text color for better visibility */
+    border: 1px solid #a26a3d; /* Add a border to the list items */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    margin-bottom: 10px; /* Add spacing between list items */
+  }
+  
+  .custom-list-item:hover {
+    background-color: #1e1e1e; /* Slightly lighter background on hover */
+  }
