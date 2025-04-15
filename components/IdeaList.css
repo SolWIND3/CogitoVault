@@ -1,0 +1,50 @@
+.idea-list-container {
+  background-color: #050301; /* Matches the app's dark theme */
+  min-height: 100vh;
+  color: #fcdcb1; /* Text color for better visibility */
+  padding: 20px;
+}
+
+.card {
+  background-color: #181818; /* Dark background for cards */
+  color: #fcdcb1; /* Text color for cards */
+  border: 1px solid #a26a3d; /* Border color for cards */
+}
+
+.card .btn-warning {
+  background-color: #a26a3d;
+  border-color: #8c5a32;
+}
+
+.card .btn-danger {
+  background-color: #8c5a32;
+  border-color: #6e4a28;
+}
+
+/* Modal background and close button styles */
+.modal-content {
+  background-color: #181818; /* Modal background color */
+  color: #fcdcb1; /* Text color for better visibility */
+}
+
+.modal-header .btn-close {
+  background-color: transparent; /* Ensure no default background */
+  border: none; /* Remove border */
+}
+
+.modal-header .btn-close:hover {
+  background-color: #a26a3d; /* Hover effect for close button */
+}
+
+.modal-header .btn-close:focus {
+  box-shadow: none; /* Remove focus outline */
+}
+
+.modal-header .btn-close svg {
+  fill: #a26a3d; /* Change the "X" icon color */
+}
+
+.back-to-main {
+  margin-top: 20px;
+  text-align: center;
+}

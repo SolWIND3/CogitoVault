@@ -66,9 +66,9 @@ function NavbarComponent() {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar expand="lg" style={{ backgroundColor: '#181818' }} variant="dark">
         <Container>
-          <Navbar.Brand as={Link} to="/">Cogito-Vault</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">CogitoVault🧠</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">

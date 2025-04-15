@@ -1,16 +1,33 @@
-import { useState, useRef } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
+import { FaLightbulb } from 'react-icons/fa'; // Import an icon from react-icons
 import NavbarComponent from '../components/NavbarComponent';
 import IdeaList from '../components/IdeaList';
+import Icon from '../Public/AltIcon.png'; // Import the Icon.png image
 
 function App() {
   return (
     <Router>
       <NavbarComponent />
       <Routes>
-        <Route path="/" element={<IdeaList />} />
-        {/* Add other routes here if needed */}
+        {/* Main page with a button */}
+        <Route
+          path="/"
+          element={
+            <div className="main-page">
+              <img src={Icon} alt="App Icon" className="app-icon" />
+              <Link to="/ideas" className="menu-button">
+                <FaLightbulb size={24} style={{ marginRight: '8px' }} />
+                Open Menu
+              </Link>
+              <footer className="footer">
+                Made with <span className="heart">❤️</span> By SolWIND3
+              </footer>
+            </div>
+          }
+        />
+        {/* Route for the IdeaList */}
+        <Route path="/ideas" element={<><IdeaList /></>} />
       </Routes>
     </Router>
   );

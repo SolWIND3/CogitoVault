@@ -1,0 +1,84 @@
+.main-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #050301; /* Updated background color */
+}
+
+.app-icon {
+  width: 200px;
+  height: 230px;
+  margin-bottom: 20px;
+  animation: bobbing 2s infinite; /* Apply the bobbing animation */
+}
+
+@keyframes bobbing {
+  0%, 100% {
+    transform: translateY(0); /* Start and end at the original position */
+  }
+  50% {
+    transform: translateY(-5px); /* Move up slightly */
+  }
+}
+
+.menu-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fcdcb1; /* Updated text color */
+  background-color: #050301;
+  border: 2px solid #a26a3d; /* Added border */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  text-decoration: none;
+}
+
+.menu-button:hover {
+  background-color: #111111;
+}
+
+/* Add borders and text color to all buttons globally */
+button, .btn {
+  border: 2px solid #a26a3d; /* Added border */
+  color: #fcdcb1; /* Updated text color */
+  transition: border-color 0.3s ease, color 0.3s ease;
+  background-color: #050301;
+}
+
+button:hover, .btn:hover {
+  border-color: #8c5a32; /* Slightly darker border on hover */
+  color: #fcdcb1; /* Ensure text color remains consistent on hover */
+  background-color: #050301;
+}
+
+/* Navbar dropdown menu styles */
+.navbar-dark .dropdown-menu {
+  background-color: #050301; /* Dropdown background color */
+  border: 1px solid #a26a3d; /* Optional border for dropdown */
+}
+
+.navbar-dark .dropdown-item {
+  color: #fcdcb1; /* Dropdown text color */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-dark .dropdown-item:hover,
+.navbar-dark .dropdown-item:focus {
+  background-color: #111111; /* Slightly lighter background on hover */
+  color: #fcdcb1; /* Ensure text color remains consistent on hover */
+}
+
+.footer {
+  margin-top: 200px;
+  font-size: 14px;
+  color: #fcdcb1; /* Matches the text color of the app */
+  text-align: center;
+}
+
+.footer .heart {
+  color: red; /* Red color for the heart emoji */
+}
