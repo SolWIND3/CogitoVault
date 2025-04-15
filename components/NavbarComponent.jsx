@@ -9,6 +9,7 @@ import AddNewIdea from './AddNewIdea';
 import ClearDatabaseModal from './ClearDatabaseModal';
 import ImportDataModal from './ImportDataModal';
 import ImportConfirmationModal from './ImportConfirmationModal';
+import ExportConfirmationModal from './ExportConfirmationModal'; // Import the new modal
 import { useState } from 'react';
 import { db } from '../models/db';
 import download from 'downloadjs';
@@ -19,6 +20,7 @@ function NavbarComponent() {
   const [showClearDBModal, setShowClearDBModal] = useState(false);
   const [showImportDataModal, setShowImportDataModal] = useState(false);
   const [showImportConfirmationModal, setShowImportConfirmationModal] = useState(false);
+  const [showExportConfirmationModal, setShowExportConfirmationModal] = useState(false); // State for export confirmation modal
   const [importedData, setImportedData] = useState(null);
   const [binderName, setBinderName] = useState('Ideas.json');
 
@@ -37,11 +39,15 @@ function NavbarComponent() {
   const handleShowImportConfirmationModal = () => setShowImportConfirmationModal(true);
   const handleCloseImportConfirmationModal = () => setShowImportConfirmationModal(false);
 
+  const handleShowExportConfirmationModal = () => setShowExportConfirmationModal(true);
+  const handleCloseExportConfirmationModal = () => setShowExportConfirmationModal(false);
+
   const handleExportData = async () => {
     const ideas = await db.ideas.toArray();
     const data = { ideas };
     const json = JSON.stringify(data, null, 2);
     download(json, binderName, 'application/json');
+    handleCloseExportConfirmationModal(); // Close the modal after exporting
   };
 
   const handleImportData = async (event) => {
@@ -74,8 +80,8 @@ function NavbarComponent() {
             <Nav className="me-auto">
               <Button onClick={handleShowIdeaModal}>New Idea</Button>
               <NavDropdown title="My Binder" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => document.getElementById('import-data-input').click()}>Import Ideas</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleExportData}>Export Ideas</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => document.getElementById('import-data-input').click()}>Import Binder</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleShowExportConfirmationModal}>Export Binder</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleShowRenameBinderModal}>Rename Binder</NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -109,6 +115,11 @@ function NavbarComponent() {
       <ImportConfirmationModal
         show={showImportConfirmationModal}
         handleClose={handleCloseImportConfirmationModal}
+      />
+      <ExportConfirmationModal
+        show={showExportConfirmationModal}
+        handleClose={handleCloseExportConfirmationModal}
+        handleConfirm={handleExportData}
       />
     </>
   );
