@@ -22,7 +22,19 @@ function App() {
                 Open Menu
               </Link>
               <footer className="footer">
-                Made with <span className="heart">❤️</span> By SolWIND3
+                Made with <span className="heart">❤️</span> By{' '}
+                <a
+                  href="https://github.com/SolWIND3"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-link"
+                >
+                  SolWIND3
+                </a>
+                <br />
+                <span>© {new Date().getFullYear()} CogitoVault. All rights reserved.</span> 
+                <br />
+                <span> Disclaimer: All user data Saved on CogitoVault are all locally stored within the browser. </span>
               </footer>
             </div>
           }

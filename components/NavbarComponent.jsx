@@ -74,7 +74,7 @@ function NavbarComponent() {
     <>
       <Navbar expand="lg" style={{ backgroundColor: '#181818' }} variant="dark">
         <Container>
-          <Navbar.Brand as={Link} to="/">CogitoVault🧠</Navbar.Brand>
+          <Navbar.Brand>CogitoVault🧠</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -85,7 +85,7 @@ function NavbarComponent() {
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleShowRenameBinderModal}>Rename Binder</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleShowClearDBModal}>Clear Database</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleShowClearDBModal}>Clear All Data</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

@@ -141,7 +141,7 @@ function IdeaList() {
               ) : (
                 <Col>
                   <p className="text-center mt-5">
-                    Nobody here but us chickens! (Create a new idea by pressing the "New Idea" Button or import a Binder!)
+                    Ain't Nobody here but us chickens! (Create a new idea by pressing the "New Idea" Button or import a Binder!)
                   </p>
                 </Col>
               )}
@@ -161,6 +161,21 @@ function IdeaList() {
         handleClose={handleCloseDeleteModal}
         handleConfirm={handleDeleteIdea}
       />
+      <footer className="footer">
+        Made with <span className="heart">❤️</span> By{' '}
+        <a
+          href="https://github.com/SolWIND3"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          SolWIND3
+        </a>
+        <br />
+        <span>© {new Date().getFullYear()} CogitoVault. All rights reserved.</span>
+        <br />
+        <span>Disclaimer: All user data saved on CogitoVault are locally stored within the browser.</span>
+      </footer>
     </div>
   );
 }

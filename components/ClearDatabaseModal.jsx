@@ -24,7 +24,7 @@ function ClearDatabaseModal({ show, handleClose }) {
           <Modal.Title>Clear Database</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to clear all database information? This action cannot be undone.</p>
+          <p>Are you sure you want to clear all your data? This action cannot be undone.</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

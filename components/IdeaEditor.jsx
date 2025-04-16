@@ -3,6 +3,7 @@ import { Button, Form, Container, Row, Col, Modal } from 'react-bootstrap';
 import { db } from '../models/db.js';
 import SuccessModal from './SuccessModal';
 import ConfirmSaveModal from './ConfirmSaveModal';
+import UnsavedChangesModal from './UnsavedChangesModal';
 
 function IdeaEditor({ selectedIdeaId, onClose }) {
   const [idea, setIdea] = useState(null);
@@ -14,6 +15,7 @@ function IdeaEditor({ selectedIdeaId, onClose }) {
   const [successMessage, setSuccessMessage] = useState('');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [showConfirmSaveModal, setShowConfirmSaveModal] = useState(false);
+  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
 
   useEffect(() => {
     const fetchIdea = async () => {
@@ -61,6 +63,25 @@ function IdeaEditor({ selectedIdeaId, onClose }) {
     handleUpdateIdea();
   };
 
+  const handleCloseEditor = () => {
+    if (isEditingDescription) {
+      setShowUnsavedChangesModal(true);
+    } else {
+      onClose();
+    }
+  };
+
+  const handleSaveChanges = () => {
+    setShowUnsavedChangesModal(false);
+    handleUpdateIdea();
+    onClose();
+  };
+
+  const handleDiscardChanges = () => {
+    setShowUnsavedChangesModal(false);
+    onClose();
+  };
+
   if (!idea) {
     return null;
   }
@@ -97,7 +118,7 @@ function IdeaEditor({ selectedIdeaId, onClose }) {
                 Save Description
               </Button>
             )}
-            <Button variant="secondary" onClick={onClose} className="ml-2">
+            <Button variant="secondary" onClick={handleCloseEditor} className="ml-2">
               Close
             </Button>
           </Form>
@@ -157,6 +178,12 @@ function IdeaEditor({ selectedIdeaId, onClose }) {
         show={showConfirmSaveModal}
         handleClose={() => setShowConfirmSaveModal(false)}
         handleConfirm={handleConfirmSaveDescription}
+      />
+      <UnsavedChangesModal
+        show={showUnsavedChangesModal}
+        handleClose={() => setShowUnsavedChangesModal(false)}
+        handleSave={handleSaveChanges}
+        handleDiscard={handleDiscardChanges}
       />
     </Container>
   );

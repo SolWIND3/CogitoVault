@@ -27,13 +27,14 @@
   color: #fcdcb1; /* Text color for better visibility */
 }
 
+/* Modal close button styles */
 .modal-header .btn-close {
   background-color: transparent; /* Ensure no default background */
   border: none; /* Remove border */
 }
 
 .modal-header .btn-close:hover {
-  background-color: #a26a3d; /* Hover effect for close button */
+  background-color: #a26a3d; /* Optional hover effect */
 }
 
 .modal-header .btn-close:focus {
@@ -41,7 +42,7 @@
 }
 
 .modal-header .btn-close svg {
-  fill: #a26a3d; /* Change the "X" icon color */
+  fill: #ffffff; /* Change the "X" icon color to white */
 }
 
 .back-to-main {

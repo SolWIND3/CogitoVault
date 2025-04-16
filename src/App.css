@@ -91,6 +91,15 @@ button:hover, .btn:hover {
   color: #fcdcb1; /* Ensure text color remains consistent on hover */
 }
 
+/* Make the navbar sticky */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030; /* Ensure it stays above other elements */
+  background-color: #181818; /* Match the navbar's background color */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
+}
+
 .footer {
   margin-top: 200px;
   font-size: 14px;
