@@ -4,27 +4,35 @@ import { db } from '../models/db.js';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert'; // Import Alert for error messages
 
 function AddNewIdea({ show, handleClose }) {
   const [ideaTitle, setIdeaTitle] = useState('');
   const [ideaType, setIdeaType] = useState('');
-  const [ideaDescription, setIdeaDescription] = useState(''); // Add state for description
+  const [ideaDescription, setIdeaDescription] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // State for error message
 
   const handleAddIdea = async () => {
-    if (ideaTitle.trim() && ideaType.trim() && ideaDescription.trim()) {
-      await db.ideas.add({
-        title: ideaTitle,
-        ideatype: ideaType,
-        description: ideaDescription, // Include description in the database entry
-        status: 'On Going',
-        creationdate: new Date(),
-        lastedited: new Date()
-      });
-      setIdeaTitle('');
-      setIdeaType('');
-      setIdeaDescription(''); // Reset description
-      handleClose();
+    if (!ideaTitle.trim() || !ideaType.trim() || !ideaDescription.trim()) {
+      setErrorMessage('All fields are required. Please fill in the missing information.');
+      return;
     }
+
+    await db.ideas.add({
+      title: ideaTitle,
+      ideatype: ideaType,
+      description: ideaDescription,
+      status: 'On Going',
+      creationdate: new Date(),
+      lastedited: new Date(),
+    });
+
+    // Reset fields and close modal
+    setIdeaTitle('');
+    setIdeaType('');
+    setIdeaDescription('');
+    setErrorMessage(''); // Clear error message
+    handleClose();
   };
 
   return (
@@ -33,6 +41,7 @@ function AddNewIdea({ show, handleClose }) {
         <Modal.Title>New Idea</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>} {/* Display error message */}
         <Form>
           <Form.Group className="mb-3" controlId="ideaTitle">
             <Form.Label>Idea Title</Form.Label>
