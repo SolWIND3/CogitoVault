@@ -16,6 +16,7 @@ function App() {
           element={
             <div className="main-page">
               <img src={Icon} alt="App Icon" className="app-icon" />
+              <div className="glowing-text">"Cogito, Ergo Sum"</div> {/* Glowing text */}
               <Link to="/ideas" className="menu-button">
                 <FaLightbulb size={24} style={{ marginRight: '8px' }} />
                 Open Menu

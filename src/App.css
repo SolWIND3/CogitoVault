@@ -23,6 +23,25 @@
   }
 }
 
+/* Glowing text styles */
+.glowing-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fcdcb1;
+  text-shadow: 0 0 5px #fcdcb1, 0 0 10px #fcdcb1, 0 0 20px #fcdcb1;
+  animation: pulse 2s infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    text-shadow: 0 0 5px #fcdcb1, 0 0 10px #fcdcb1, 0 0 20px #fcdcb1;
+  }
+  50% {
+    text-shadow: 0 0 10px #fcdcb1, 0 0 20px #fcdcb1, 0 0 40px #fcdcb1;
+  }
+}
+
 .menu-button {
   display: flex;
   align-items: center;
