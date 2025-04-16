@@ -118,25 +118,33 @@ function IdeaList() {
           </Form>
           <Container>
             <Row>
-              {filteredIdeas?.map((idea) => (
-                <Col key={idea.id} md={6} lg={4}>
-                  <Card className="mb-3">
-                    <Card.Body>
-                      <Card.Title>{idea.title}</Card.Title>
-                      <Card.Text><strong>Creation Date:</strong> {new Date(idea.creationdate).toLocaleString()}</Card.Text>
-                      <Card.Text><strong>Last Edited:</strong> {new Date(idea.lastedited).toLocaleString()}</Card.Text>
-                      <Card.Text><strong>Type:</strong> {idea.ideatype}</Card.Text>
-                      <Card.Text><strong>Status:</strong> {idea.status}</Card.Text> {/* Display the status */}
-                      <Button variant="warning" onClick={() => handleEditIdea(idea.id)}>
-                        Open
-                      </Button>
-                      <Button variant="danger" onClick={() => handleShowDeleteModal(idea.id)} className="ml-2">
-                        Delete
-                      </Button>
-                    </Card.Body>
-                  </Card>
+              {filteredIdeas.length > 0 ? (
+                filteredIdeas.map((idea) => (
+                  <Col key={idea.id} md={6} lg={4}>
+                    <Card className="mb-3">
+                      <Card.Body>
+                        <Card.Title>{idea.title}</Card.Title>
+                        <Card.Text><strong>Creation Date:</strong> {new Date(idea.creationdate).toLocaleString()}</Card.Text>
+                        <Card.Text><strong>Last Edited:</strong> {new Date(idea.lastedited).toLocaleString()}</Card.Text>
+                        <Card.Text><strong>Type:</strong> {idea.ideatype}</Card.Text>
+                        <Card.Text><strong>Status:</strong> {idea.status}</Card.Text> {/* Display the status */}
+                        <Button variant="warning" onClick={() => handleEditIdea(idea.id)}>
+                          Open
+                        </Button>
+                        <Button variant="danger" onClick={() => handleShowDeleteModal(idea.id)} className="ml-2">
+                          Delete
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))
+              ) : (
+                <Col>
+                  <p className="text-center mt-5">
+                    Nobody here but us chickens! (Create a new idea by pressing the "New Idea" Button or import a Binder!)
+                  </p>
                 </Col>
-              ))}
+              )}
             </Row>
           </Container>
           <div className="back-to-main">
