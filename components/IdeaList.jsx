@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
@@ -7,63 +7,80 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { db } from '../models/db.js';
 import IdeaEditor from './IdeaEditor';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
-import { useLiveQuery } from 'dexie-react-hooks';
-import './IdeaList.css'; // Import the CSS file
+import './IdeaList.css';
 
 function IdeaList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIdeaId, setSelectedIdeaId] = useState(null);
   const [filteredIdeas, setFilteredIdeas] = useState([]);
+  const [allIdeas, setAllIdeas] = useState([]); // Store all ideas
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [ideaToDelete, setIdeaToDelete] = useState(null);
   const [filterType, setFilterType] = useState(''); // State for filtering by ideatype
   const [ideaTypes, setIdeaTypes] = useState([]); // State to store unique ideatypes
-
-  const ideas = useLiveQuery(
-    () => db.ideas.toArray(),
-    []
-  );
+  const [sortOrder, setSortOrder] = useState(''); // State for sorting order
 
   useEffect(() => {
-    if (ideas) {
-      setFilteredIdeas(ideas);
-      fetchIdeaTypes();
-    }
-  }, [ideas]);
+    fetchIdeas();
+  }, []);
 
-  const fetchIdeaTypes = () => {
-    const uniqueTypesWithContent = [
+  const fetchIdeas = () => {
+    db.ideas
+      .toArray()
+      .then((ideas) => {
+        setAllIdeas(ideas);
+        setFilteredIdeas(ideas);
+        fetchIdeaTypes(ideas);
+      })
+      .catch((error) => {
+        console.error('Error fetching ideas:', error);
+      });
+  };
+
+  const fetchIdeaTypes = (ideas) => {
+    const uniqueTypes = [
       ...new Set(
         ideas
-          .filter((idea) => idea.content && idea.content.trim() !== '') // Ensure the idea has content
           .map((idea) => idea.ideatype)
           .filter((type) => type && type.trim() !== '') // Ensure the ideatype is not empty
       ),
     ];
-    setIdeaTypes(uniqueTypesWithContent);
+    setIdeaTypes(uniqueTypes);
   };
 
   const handleSearch = () => {
-    if (ideas) {
-      const searchedIdeas = ideas.filter((idea) => {
-        const matchesSearchTerm = idea.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesFilterType = filterType ? idea.ideatype === filterType : true;
-        return matchesSearchTerm && matchesFilterType;
-      });
-      setFilteredIdeas(searchedIdeas);
+    let searchedIdeas = allIdeas.filter((idea) => {
+      const matchesSearchTerm = idea.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesFilterType = filterType ? idea.ideatype === filterType : true;
+      return matchesSearchTerm && matchesFilterType;
+    });
+
+    // Apply sorting by creation date
+    if (sortOrder === 'newest') {
+      searchedIdeas = searchedIdeas.sort((a, b) => new Date(b.creationdate) - new Date(a.creationdate));
+    } else if (sortOrder === 'oldest') {
+      searchedIdeas = searchedIdeas.sort((a, b) => new Date(a.creationdate) - new Date(b.creationdate));
     }
+
+    setFilteredIdeas(searchedIdeas);
   };
 
   const handleEditIdea = (id) => {
     setSelectedIdeaId(id);
   };
 
-  const handleDeleteIdea = async () => {
+  const handleDeleteIdea = () => {
     if (ideaToDelete) {
-      await db.ideas.delete(ideaToDelete);
-      setFilteredIdeas(filteredIdeas.filter((idea) => idea.id !== ideaToDelete));
-      setShowDeleteModal(false);
-      setIdeaToDelete(null);
+      db.ideas
+        .delete(ideaToDelete)
+        .then(() => {
+          fetchIdeas(); // Refresh the list after deletion
+          setShowDeleteModal(false);
+          setIdeaToDelete(null);
+        })
+        .catch((error) => {
+          console.error('Error deleting idea:', error);
+        });
     }
   };
 
@@ -112,8 +129,20 @@ function IdeaList() {
                 ))}
               </Form.Select>
             </Form.Group>
+            <Form.Group className="mb-3" controlId="sortOrder">
+              <Form.Select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
+                <option value="oldest">Oldest to Newest</option>
+                <option value="newest">Newest to Oldest</option>
+              </Form.Select>
+            </Form.Group>
             <Button variant="primary" onClick={handleSearch}>
               Search
+            </Button>
+            <Button variant="secondary" onClick={fetchIdeas} className="ml-2">
+              Refresh List
             </Button>
           </Form>
           <Container>
@@ -127,7 +156,7 @@ function IdeaList() {
                         <Card.Text><strong>Creation Date:</strong> {new Date(idea.creationdate).toLocaleString()}</Card.Text>
                         <Card.Text><strong>Last Edited:</strong> {new Date(idea.lastedited).toLocaleString()}</Card.Text>
                         <Card.Text><strong>Type:</strong> {idea.ideatype}</Card.Text>
-                        <Card.Text><strong>Status:</strong> {idea.status}</Card.Text> {/* Display the status */}
+                        <Card.Text><strong>Status:</strong> {idea.status}</Card.Text>
                         <Button variant="warning" onClick={() => handleEditIdea(idea.id)}>
                           Open
                         </Button>
