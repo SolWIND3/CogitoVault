@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { db } from '../models/db.js';
 import ErrorModal from './ErrorModal';
-import './Idealist.css'; // Import the CSS file
+import './IdeaList.css'; // Corrected path
 
 function ImportDataModal({ show, handleClose, importedData, handleConfirmImportData }) {
   const [conflicts, setConflicts] = useState([]);
