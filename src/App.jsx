@@ -3,7 +3,7 @@ import './App.css';
 import { FaLightbulb } from 'react-icons/fa'; // Import an icon from react-icons
 import NavbarComponent from '../components/NavbarComponent';
 import IdeaList from '../components/IdeaList';
-import Icon from '../Public/AltIcon.png'; // Import the Icon.png image
+import Icon from '/AltIcon.png'; // Corrected path
 
 function App() {
   return (
