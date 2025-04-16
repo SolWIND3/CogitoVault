@@ -7,22 +7,22 @@ import Modal from 'react-bootstrap/Modal';
 
 function AddNewIdea({ show, handleClose }) {
   const [ideaTitle, setIdeaTitle] = useState('');
-  const [ideaContent, setIdeaContent] = useState('');
   const [ideaType, setIdeaType] = useState('');
+  const [ideaDescription, setIdeaDescription] = useState(''); // Add state for description
 
   const handleAddIdea = async () => {
-    if (ideaTitle.trim() && ideaContent.trim() && ideaType.trim()) {
+    if (ideaTitle.trim() && ideaType.trim() && ideaDescription.trim()) {
       await db.ideas.add({
         title: ideaTitle,
-        content: ideaContent,
         ideatype: ideaType,
+        description: ideaDescription, // Include description in the database entry
         status: 'On Going',
         creationdate: new Date(),
         lastedited: new Date()
       });
       setIdeaTitle('');
-      setIdeaContent('');
       setIdeaType('');
+      setIdeaDescription(''); // Reset description
       handleClose();
     }
   };
@@ -44,14 +44,14 @@ function AddNewIdea({ show, handleClose }) {
               autoFocus
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="ideaContent">
-            <Form.Label>Idea Content</Form.Label>
+          <Form.Group className="mb-3" controlId="ideaDescription">
+            <Form.Label>Idea Description</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
-              placeholder="Idea Content"
-              value={ideaContent}
-              onChange={(e) => setIdeaContent(e.target.value)}
+              placeholder="Idea Description"
+              value={ideaDescription}
+              onChange={(e) => setIdeaDescription(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="ideaType">

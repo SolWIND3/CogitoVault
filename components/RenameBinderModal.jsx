@@ -8,7 +8,9 @@ function RenameBinderModal({ show, handleClose, binderName, setBinderName }) {
   const [newBinderName, setNewBinderName] = useState(binderName);
 
   const handleRenameBinder = () => {
-    setBinderName(newBinderName);
+    // Use default name if no name is provided
+    const finalBinderName = newBinderName.trim() || 'Binder';
+    setBinderName(finalBinderName);
     handleClose();
   };
 
