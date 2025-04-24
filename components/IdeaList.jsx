@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { liveQuery } from 'dexie';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -12,58 +14,30 @@ import './IdeaList.css';
 function IdeaList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIdeaId, setSelectedIdeaId] = useState(null);
-  const [filteredIdeas, setFilteredIdeas] = useState([]);
-  const [allIdeas, setAllIdeas] = useState([]); // Store all ideas
+  const [filterType, setFilterType] = useState(''); // State for filtering by ideatype
+  const [sortOrder, setSortOrder] = useState(''); // State for sorting order
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [ideaToDelete, setIdeaToDelete] = useState(null);
-  const [filterType, setFilterType] = useState(''); // State for filtering by ideatype
-  const [ideaTypes, setIdeaTypes] = useState([]); // State to store unique ideatypes
-  const [sortOrder, setSortOrder] = useState(''); // State for sorting order
 
-  useEffect(() => {
-    fetchIdeas();
-  }, []);
+  // Use liveQuery to fetch ideas and update automatically when the database changes (for faster response time in overall UI and functionality)
+  const allIdeas = useLiveQuery(() => db.ideas.toArray(), []);
 
-  const fetchIdeas = () => {
-    db.ideas
-      .toArray()
-      .then((ideas) => {
-        setAllIdeas(ideas);
-        setFilteredIdeas(ideas);
-        fetchIdeaTypes(ideas);
-      })
-      .catch((error) => {
-        console.error('Error fetching ideas:', error);
-      });
-  };
-
-  const fetchIdeaTypes = (ideas) => {
-    const uniqueTypes = [
-      ...new Set(
-        ideas
-          .map((idea) => idea.ideatype)
-          .filter((type) => type && type.trim() !== '') // Ensure the ideatype is not empty
-      ),
-    ];
-    setIdeaTypes(uniqueTypes);
-  };
-
-  const handleSearch = () => {
-    let searchedIdeas = allIdeas.filter((idea) => {
-      const matchesSearchTerm = idea.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilterType = filterType ? idea.ideatype === filterType : true;
-      return matchesSearchTerm && matchesFilterType;
-    });
-
-    // Apply sorting by creation date
-    if (sortOrder === 'newest') {
-      searchedIdeas = searchedIdeas.sort((a, b) => new Date(b.creationdate) - new Date(a.creationdate));
-    } else if (sortOrder === 'oldest') {
-      searchedIdeas = searchedIdeas.sort((a, b) => new Date(a.creationdate) - new Date(b.creationdate));
-    }
-
-    setFilteredIdeas(searchedIdeas);
-  };
+  const filteredIdeas = allIdeas
+    ? allIdeas
+        .filter((idea) => {
+          const matchesSearchTerm = idea.title.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesFilterType = filterType ? idea.ideatype === filterType : true;
+          return matchesSearchTerm && matchesFilterType;
+        })
+        .sort((a, b) => {
+          if (sortOrder === 'newest') {
+            return new Date(b.creationdate) - new Date(a.creationdate);
+          } else if (sortOrder === 'oldest') {
+            return new Date(a.creationdate) - new Date(b.creationdate);
+          }
+          return 0;
+        })
+    : [];
 
   const handleEditIdea = (id) => {
     setSelectedIdeaId(id);
@@ -74,7 +48,6 @@ function IdeaList() {
       db.ideas
         .delete(ideaToDelete)
         .then(() => {
-          fetchIdeas(); // Refresh the list after deletion
           setShowDeleteModal(false);
           setIdeaToDelete(null);
         })
@@ -97,7 +70,6 @@ function IdeaList() {
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSearch();
     }
   };
 
@@ -122,11 +94,14 @@ function IdeaList() {
                 onChange={(e) => setFilterType(e.target.value)}
               >
                 <option value="">All Types</option>
-                {ideaTypes.map((type, index) => (
-                  <option key={index} value={type}>
-                    {type}
-                  </option>
-                ))}
+                {allIdeas &&
+                  [...new Set(allIdeas.map((idea) => idea.ideatype).filter((type) => type && type.trim() !== ''))].map(
+                    (type, index) => (
+                      <option key={index} value={type}>
+                        {type}
+                      </option>
+                    )
+                  )}
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3" controlId="sortOrder">
@@ -138,12 +113,6 @@ function IdeaList() {
                 <option value="newest">Newest to Oldest</option>
               </Form.Select>
             </Form.Group>
-            <Button variant="primary" onClick={handleSearch}>
-              Search
-            </Button>
-            <Button variant="secondary" onClick={fetchIdeas} className="ml-2">
-              Refresh List
-            </Button>
           </Form>
           <Container>
             <Row>
@@ -153,10 +122,18 @@ function IdeaList() {
                     <Card className="mb-3">
                       <Card.Body>
                         <Card.Title>{idea.title}</Card.Title>
-                        <Card.Text><strong>Creation Date:</strong> {new Date(idea.creationdate).toLocaleString()}</Card.Text>
-                        <Card.Text><strong>Last Edited:</strong> {new Date(idea.lastedited).toLocaleString()}</Card.Text>
-                        <Card.Text><strong>Type:</strong> {idea.ideatype}</Card.Text>
-                        <Card.Text><strong>Status:</strong> {idea.status}</Card.Text>
+                        <Card.Text>
+                          <strong>Creation Date:</strong> {new Date(idea.creationdate).toLocaleString()}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>Last Edited:</strong> {new Date(idea.lastedited).toLocaleString()}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>Type:</strong> {idea.ideatype}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>Status:</strong> {idea.status}
+                        </Card.Text>
                         <Button variant="warning" onClick={() => handleEditIdea(idea.id)}>
                           Open
                         </Button>
@@ -170,7 +147,8 @@ function IdeaList() {
               ) : (
                 <Col>
                   <p className="text-center mt-5">
-                    Ain't Nobody here but us chickens! (Create a new idea by pressing the "New Idea" Button or import a Binder!)
+                    Ain't Nobody here but us chickens! (Create a new idea by pressing the "New Idea" Button or import a
+                    Binder!)
                   </p>
                 </Col>
               )}
