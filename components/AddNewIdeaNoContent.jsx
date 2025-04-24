@@ -4,7 +4,7 @@ import { db } from '../models/db.js';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-
+// omitted version of newidea modal, old version that adds idea info regardless if content has been entered or not.
 function AddNewIdea({ show, handleClose }) {
   const [ideaTitle, setIdeaTitle] = useState('');
 
